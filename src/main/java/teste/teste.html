@@ -3,94 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo Aula - REST</title>
+    <title>CRUD REST para Comida</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
     <div class="container py-5">
-        <h1 class="text-center mb-4">Exemplo Aula - REST</h1>
+        <h1 class="text-center mb-4">CRUD REST para Comida</h1>
 
-        <!-- Criar Pessoa -->
         <div class="card mb-4">
             <div class="card-body">
-                <h2 class="card-title">Criar Pessoa</h2>
-                <form id="createForm" onsubmit="createPessoa(); return false;">
+                <h2 class="card-title">Criar Comida (POST)</h2>
+                <form id="createForm" onsubmit="createComida(); return false;">
                     <div class="mb-3">
                         <label for="nome" class="form-label">Nome</label>
-                        <input type="text" id="nome" class="form-control" placeholder="Nome" required>
+                        <input type="text" id="nome" class="form-control" placeholder="Nome da Comida" required>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" class="form-control" placeholder="Email" required>
+                        <label for="preco" class="form-label">Preço</label>
+                        <input type="number" step="0.01" id="preco" class="form-control" placeholder="Preço" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="idade" class="form-label">Idade</label>
-                        <input type="number" id="idade" class="form-control" placeholder="Idade" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="endereco" class="form-label">Endereço</label>
-                        <input type="text" id="endereco" class="form-control" placeholder="Endereço" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Criar Pessoa</button>
+                    <button type="submit" class="btn btn-primary">Criar Comida</button>
                 </form>
             </div>
         </div>
 
-        <!-- Buscar Pessoa -->
         <div class="card mb-4">
             <div class="card-body">
-                <h2 class="card-title">Buscar Pessoa</h2>
-                <form id="buscarForm" onsubmit="getPessoa(); return false;">
+                <h2 class="card-title">Buscar/Listar Comida (GET)</h2>
+                <form id="buscarForm" onsubmit="getComida(); return false;">
                     <div class="mb-3">
-                        <label for="buscarEmail" class="form-label">Email</label>
-                        <input type="email" id="buscarEmail" class="form-control" placeholder="Email">
+                        <label for="buscarNome" class="form-label">Nome (Busca Única, Opcional)</label>
+                        <input type="text" id="buscarNome" class="form-control" placeholder="Nome da Comida">
+                        <small class="form-text text-muted">Deixe em branco para listar todas.</small>
                     </div>
-                    <button type="submit" class="btn btn-info">Buscar</button>
+                    <button type="submit" class="btn btn-info">Buscar / Listar</button>
                 </form>
             </div>
         </div>
 
-        <!-- Atualizar Pessoa -->
         <div class="card mb-4">
             <div class="card-body">
-                <h2 class="card-title">Atualizar Pessoa</h2>
-                <form id="updateForm" onsubmit="updatePessoa(); return false;">
+                <h2 class="card-title">Atualizar Comida (PUT)</h2>
+                <form id="updateForm" onsubmit="updateComida(); return false;">
                     <div class="mb-3">
-                        <label for="updateNome" class="form-label">Nome</label>
+                        <label for="updateId" class="form-label">ID (Chave)</label>
+                        <input type="number" id="updateId" class="form-control" placeholder="ID da Comida" required>
+                        <small class="form-text text-danger">O ID é necessário pra o JPA atualizar o registro.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateNome" class="form-label">Novo Nome</label>
                         <input type="text" id="updateNome" class="form-control" placeholder="Nome">
                     </div>
                     <div class="mb-3">
-                        <label for="updateEmail" class="form-label">Email (chave)</label>
-                        <input type="email" id="updateEmail" class="form-control" placeholder="Email" required>
+                        <label for="updatePreco" class="form-label">Novo Preço</label>
+                        <input type="number" step="0.01" id="updatePreco" class="form-control" placeholder="Preço">
                     </div>
-                    <div class="mb-3">
-                        <label for="updateIdade" class="form-label">Idade</label>
-                        <input type="number" id="updateIdade" class="form-control" placeholder="Idade">
-                    </div>
-                    <div class="mb-3">
-                        <label for="updateEndereco" class="form-label">Endereço</label>
-                        <input type="text" id="updateEndereco" class="form-control" placeholder="Endereço">
-                    </div>
-                    <button type="submit" class="btn btn-warning">Atualizar Pessoa</button>
+                    <button type="submit" class="btn btn-warning">Atualizar Comida</button>
                 </form>
             </div>
         </div>
 
-        <!-- Deletar Pessoa -->
         <div class="card mb-4">
             <div class="card-body">
-                <h2 class="card-title">Deletar Pessoa</h2>
-                <form id="deleteForm" onsubmit="deletePessoa(); return false;">
+                <h2 class="card-title">Deletar Comida (DELETE)</h2>
+                <form id="deleteForm" onsubmit="deleteComida(); return false;">
                     <div class="mb-3">
-                        <label for="deleteEmail" class="form-label">Email</label>
-                        <input type="email" id="deleteEmail" class="form-control" placeholder="Email" required>
+                        <label for="deleteNome" class="form-label">Nome (Chave)</label>
+                        <input type="text" id="deleteNome" class="form-control" placeholder="Nome da Comida" required>
                     </div>
                     <button type="submit" class="btn btn-danger">Deletar</button>
                 </form>
             </div>
         </div>
 
-        <!-- Resposta do Servidor -->
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">Resposta do Servidor</h2>
@@ -99,61 +84,67 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const apiUrl = 'http://localhost:8080/api/pessoa';
+        const apiUrl = 'http://localhost:8080/api/comida'; 
 
         function displayResponse(response) {
             document.getElementById('response').innerText = JSON.stringify(response, null, 2);
         }
 
-        function createPessoa() {
-            const pessoa = {
+        // POST: Criar Comida
+        function createComida() {
+            const comida = {
+                id: 0,
                 nome: document.getElementById('nome').value,
-                email: document.getElementById('email').value,
-                idade: parseInt(document.getElementById('idade').value),
-                endereco: document.getElementById('endereco').value
+                preco: parseFloat(document.getElementById('preco').value)
             };
             fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(pessoa)
+                body: JSON.stringify(comida)
             })
             .then(response => response.json())
             .then(data => displayResponse(data))
             .catch(error => displayResponse({ error: error.message }));
         }
 
-        function getPessoa() {
-            const email = document.getElementById('buscarEmail').value;
-            const url = email ? `${apiUrl}?email=${email}` : apiUrl;
+        // GET: Buscar Única ou Listar Todas
+        function getComida() {
+            const nome = document.getElementById('buscarNome').value.trim();
+            const url = nome ? `${apiUrl}?nome=${encodeURIComponent(nome)}` : apiUrl;
             fetch(url)
-                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 200 || response.status === 201) {
+                         return response.json();
+                    }
+                    throw new Error(`Erro ao buscar: ${response.statusText}`);
+                })
                 .then(data => displayResponse(data))
                 .catch(error => displayResponse({ error: error.message }));
         }
 
-        function updatePessoa() {
-            const pessoa = {
+        // PUT: Atualizar Comida
+        function updateComida() {
+            const comida = {
+                id: parseInt(document.getElementById('updateId').value),
                 nome: document.getElementById('updateNome').value,
-                email: document.getElementById('updateEmail').value,
-                idade: parseInt(document.getElementById('updateIdade').value),
-                endereco: document.getElementById('updateEndereco').value
+                preco: parseFloat(document.getElementById('updatePreco').value)
             };
             fetch(apiUrl, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(pessoa)
+                body: JSON.stringify(comida)
             })
             .then(response => response.json())
             .then(data => displayResponse(data))
             .catch(error => displayResponse({ error: error.message }));
         }
 
-        function deletePessoa() {
-            const email = document.getElementById('deleteEmail').value;
-            const url = `${apiUrl}?email=${email}`;
+        // DELETE: Deletar Comida por Nome
+        function deleteComida() {
+            const nome = document.getElementById('deleteNome').value;
+            const url = `${apiUrl}?nome=${encodeURIComponent(nome)}`; 
             fetch(url, { method: 'DELETE' })
                 .then(response => response.json())
                 .then(data => displayResponse(data))

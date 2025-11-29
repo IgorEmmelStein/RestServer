@@ -1,44 +1,29 @@
--- Configurações básicas
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-CREATE DATABASE IF NOT EXISTS `pessoa` 
+-- 1. Cria a base de dados que o JPA espera (conforme persistence.xml)
+CREATE DATABASE IF NOT EXISTS `comida` 
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
--- ==========================================================
--- 1. LIMPEZA E CRIAÇÃO DA TABELA `comida`
--- ==========================================================
+-- 2. Seleciona a nova base de dados
+USE `comida`;
 
--- Se a tabela 'pessoa' ainda existir e quiseres limpá-la
-DROP TABLE IF EXISTS `pessoa`;
+-- 3. Cria a tabela 'comida' (estrutura do ExemploSQL.sql)
+DROP TABLE IF EXISTS `comida`;
 
--- 
--- ESTRUTURA DA TABELA `comida`
---
 CREATE TABLE `comida` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(255) NOT NULL,
-  -- DECIMAL(10, 2) é o tipo mais adequado para valores monetários/double
   `preco` DECIMAL(10, 2) NOT NULL, 
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
--- ==========================================================
--- 2. INSERÇÃO DE DADOS INICIAIS (OPCIONAL, para teste)
--- ==========================================================
-
+-- 4. Insere dados iniciais (opcional, pra teste)
 INSERT INTO `comida` (`nome`, `preco`) VALUES
 ('Pizza Calabresa', 39.90),
 ('Hambúrguer Clássico', 22.50),
 ('Refrigerante Lata', 6.50);
 
--- ==========================================================
--- 3. AJUSTES FINAIS
--- ==========================================================
+select nome from comida;
 
--- O AUTO_INCREMENT deve ser modificado após a inserção (ou mantido pelo JPA)
 ALTER TABLE `comida`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
-  
+
 COMMIT;

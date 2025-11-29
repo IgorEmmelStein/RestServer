@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 
 public class ComidaDao { // Nome da classe adaptado
@@ -39,26 +40,54 @@ public class ComidaDao { // Nome da classe adaptado
         }
     }
 
-    public Comida getComida(String nome) { // Busca por Nome, não por email
-        // Usa a NamedQuery criada em Comida.java
-        Comida comida = em.createNamedQuery("Comida.buscaPorNome", Comida.class)
-                .setParameter("nome", nome)
-                .getSingleResult();
-
-        return comida;
+    public Comida getComida(String nome) {
+        try {
+            Comida comida = em.createNamedQuery("Comida.buscaPorNome", Comida.class)
+                    .setParameter("nome", nome)
+                    .getSingleResult();
+            return comida;
+        } catch (NoResultException e) {
+            // Retorna null se não encontrar
+            return null;
+        } catch (Exception e) {
+            // Trata outros erros de persistência
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public boolean excluir(String nome) {
-        Comida comida = em.createNamedQuery("Comida.buscaPorNome", Comida.class)
-                .setParameter("nome", nome)
-                .getSingleResult();
+        List<Comida> listaComidas;
 
-        if (comida != null) {
+        try {
+            // 1. Usa getResultList para buscar TODAS as entidades com o mesmo nome
+            listaComidas = em.createNamedQuery("Comida.buscaPorNome", Comida.class)
+                    .setParameter("nome", nome)
+                    .getResultList();
+
+            if (listaComidas.isEmpty()) {
+                return false; // Não encontrada
+            }
+
             this.em.getTransaction().begin();
-            this.em.remove(comida);
+
+            // 2. Deleta todas as ocorrências
+            for (Comida c : listaComidas) {
+                // Garante que a entidade esteja gerenciada antes de remover
+                Comida managedComida = em.contains(c) ? c : em.merge(c);
+                this.em.remove(managedComida);
+            }
+
             this.em.getTransaction().commit();
             return true;
-        } else {
+
+        } catch (Exception e) {
+            // Captura qualquer erro (incluindo falha de transação)
+            if (this.em.getTransaction().isActive()) {
+                this.em.getTransaction().rollback();
+            }
+            // Para debug em produção, descomente abaixo:
+            // e.printStackTrace(); 
             return false;
         }
     }
