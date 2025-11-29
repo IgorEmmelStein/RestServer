@@ -3,7 +3,7 @@
  */
 package exemplo;
 
-import exemplo.servlet.PessoaServlet;
+import exemplo.servlet.ComidaServlet;
 import jakarta.servlet.DispatcherType;
 import java.util.EnumSet;
 import org.eclipse.jetty.server.Server;
@@ -32,16 +32,19 @@ public class WebServer {
         cors.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, "true");
 
         // Adiciona o Servlet para gerenciar o CRUD
-        context.addServlet(new ServletHolder(new PessoaServlet()), "/api/pessoa/*");
+        context.addServlet(new ServletHolder(new ComidaServlet()), "/api/comida/*");
 
         // Inicia o servidor
         try {
             server.start();
-            System.out.println("Servidor rodando em: http://localhost:8080/api/pessoa");
+            // Lembre-se de atualizar o print para /api/comida!
+            System.out.println("Servidor rodando em: http://localhost:8080/api/comida");
             server.join();
         } catch (Exception e) {
+            // **CORREÇÃO:** Adiciona a linha abaixo para ver a causa real
+            e.printStackTrace();
         } finally {
-            server.destroy();
+            server.destroy(); // Linha 44, agora vai executar após o print do erro
         }
     }
 }

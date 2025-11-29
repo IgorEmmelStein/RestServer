@@ -27,7 +27,7 @@ public class JDBCHelper {
             try {
                 stmt.close();
             } catch (SQLException ex) {
-                Logger.getLogger(PessoaDao.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ComidaDao.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

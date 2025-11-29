@@ -1,10 +1,9 @@
-exemplo\modelDomain\Pessoa_.class
 teste\ExemploGson.class
 exemplo\dao\JDBCHelper.class
-exemplo\dao\PessoaDao.class
+exemplo\modelDomain\Comida.class
+exemplo\servlet\ComidaServlet.class
 exemplo\WebServer.class
-exemplo\servlet\PessoaServlet.class
+exemplo\dao\ComidaDaoJDBC.class
+exemplo\dao\ComidaDao.class
 teste\Usuario.class
-exemplo\dao\PessoaDaoJDBC.class
 exemplo\factory\FactoryConnector.class
-exemplo\modelDomain\Pessoa.class
