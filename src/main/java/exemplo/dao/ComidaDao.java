@@ -1,6 +1,6 @@
 package exemplo.dao;
 
-import exemplo.modelDomain.Comida; // Usamos a nova entidade Comida
+import exemplo.modelDomain.Comida;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -8,17 +8,17 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 
-public class ComidaDao { // Nome da classe adaptado
+public class ComidaDao {
 
     EntityManagerFactory emf;
     EntityManager em;
 
     public ComidaDao() {
         this.emf = Persistence.createEntityManagerFactory("exemplo_RestWebServer_jar_v1PU");
-        this.em = emf.createEntityManager(); // Corrigindo a atribuição, como discutido
+        this.em = emf.createEntityManager();
     }
 
-    public boolean inserir(Comida comida) { // Método para inserir Comida
+    public boolean inserir(Comida comida) {
         this.em.getTransaction().begin();
         this.em.persist(comida);
         this.em.getTransaction().commit();
@@ -26,7 +26,7 @@ public class ComidaDao { // Nome da classe adaptado
         return true;
     }
 
-    public boolean atualizar(Comida c) { // Implementação do PUT (Atualizar)
+    public boolean atualizar(Comida c) {
         try {
             this.em.getTransaction().begin();
             this.em.merge(c);
@@ -47,10 +47,10 @@ public class ComidaDao { // Nome da classe adaptado
                     .getSingleResult();
             return comida;
         } catch (NoResultException e) {
-            // Retorna null se não encontrar
+
             return null;
         } catch (Exception e) {
-            // Trata outros erros de persistência
+
             e.printStackTrace();
             return null;
         }
@@ -60,20 +60,19 @@ public class ComidaDao { // Nome da classe adaptado
         List<Comida> listaComidas;
 
         try {
-            // 1. Usa getResultList para buscar TODAS as entidades com o mesmo nome
+
             listaComidas = em.createNamedQuery("Comida.buscaPorNome", Comida.class)
                     .setParameter("nome", nome)
                     .getResultList();
 
             if (listaComidas.isEmpty()) {
-                return false; // Não encontrada
+                return false;
             }
 
             this.em.getTransaction().begin();
 
-            // 2. Deleta todas as ocorrências
             for (Comida c : listaComidas) {
-                // Garante que a entidade esteja gerenciada antes de remover
+
                 Comida managedComida = em.contains(c) ? c : em.merge(c);
                 this.em.remove(managedComida);
             }
@@ -82,17 +81,16 @@ public class ComidaDao { // Nome da classe adaptado
             return true;
 
         } catch (Exception e) {
-            // Captura qualquer erro (incluindo falha de transação)
+
             if (this.em.getTransaction().isActive()) {
                 this.em.getTransaction().rollback();
             }
-            // Para debug em produção, descomente abaixo:
-            // e.printStackTrace(); 
+
             return false;
         }
     }
 
-    public ArrayList<Comida> listarComidas() { // Retorna a lista de Comidas
+    public ArrayList<Comida> listarComidas() {
         List<Comida> lista = em.createNamedQuery("Comida.listarTodas", Comida.class)
                 .getResultList();
 

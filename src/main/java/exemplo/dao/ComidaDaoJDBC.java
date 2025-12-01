@@ -11,34 +11,33 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ComidaDaoJDBC { // Renomeado
+public class ComidaDaoJDBC {
 
     private final Connection conn;
 
     public ComidaDaoJDBC() {
-        // Conexão JDBC
+
         conn = FactoryConnector.getConection();
     }
 
-    // Altera a assinatura para buscar por nome (String) e usa Comida
     public Comida getComida(String nome) {
         PreparedStatement stmt = null;
         Comida comida = null;
 
         try {
-            // SQL para buscar na tabela 'comida' por nome
+
             String sql = " SELECT id, nome, preco FROM comida WHERE nome = ? ";
 
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nome); // Busca por nome
+            stmt.setString(1, nome);
 
             ResultSet res = stmt.executeQuery();
 
             while (res.next()) {
-                // Cria o objeto Comida com os novos campos
+
                 comida = new Comida(res.getInt("id"),
                         res.getString("nome"),
-                        res.getDouble("preco")); // Usa getDouble para preco
+                        res.getDouble("preco"));
             }
             res.close();
             stmt.close();
@@ -56,30 +55,29 @@ public class ComidaDaoJDBC { // Renomeado
         }
     }
 
-    public boolean inserir(Comida c) throws SQLException { // Inserir Comida
+    public boolean inserir(Comida c) throws SQLException {
 
-        // SQL para inserir na tabela 'comida'
         String sql = "INSERT INTO comida (nome, preco) "
                 + "         VALUES (?,?)";
 
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, c.getNome());
-        stmt.setDouble(2, c.getPreco()); // Preço é double
+        stmt.setDouble(2, c.getPreco());
 
         return JDBCHelper.execute(stmt);
     }
 
-    public boolean atualizar(Comida c) { // Atualizar Comida
+    public boolean atualizar(Comida c) {
         PreparedStatement stmt = null;
 
         try {
-            // SQL para atualizar na tabela 'comida'
+
             String sql = "UPDATE comida SET nome = ?, preco = ? WHERE id = ?";
 
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, c.getNome());
             stmt.setDouble(2, c.getPreco());
-            stmt.setInt(3, c.getId()); // Atualiza pelo ID
+            stmt.setInt(3, c.getId());
 
             return JDBCHelper.execute(stmt);
         } catch (SQLException e) {
@@ -96,9 +94,8 @@ public class ComidaDaoJDBC { // Renomeado
         }
     }
 
-    public boolean excluir(String nome) throws SQLException { // Excluir por Nome
+    public boolean excluir(String nome) throws SQLException {
 
-        // SQL para deletar da tabela 'comida' por nome
         String sql = "DELETE FROM comida where nome = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, nome);
@@ -106,12 +103,12 @@ public class ComidaDaoJDBC { // Renomeado
         return JDBCHelper.execute(stmt);
     }
 
-    public ArrayList<Comida> listarComidas() { // Listar todas as Comidas
+    public ArrayList<Comida> listarComidas() {
         Statement stmt = null;
         ArrayList<Comida> listaComida = new ArrayList<>();
 
         try {
-            // SQL para listar todas as comidas
+
             String sql = "SELECT id, nome, preco from comida";
 
             stmt = conn.createStatement();
@@ -120,7 +117,6 @@ public class ComidaDaoJDBC { // Renomeado
             while (res.next()) {
                 Comida comida;
 
-                // Cria o objeto Comida
                 comida = new Comida(res.getInt("id"),
                         res.getString("nome"),
                         res.getDouble("preco"));
@@ -143,5 +139,4 @@ public class ComidaDaoJDBC { // Renomeado
         }
     }
 
-    // Métodos antigos que não se aplicam ao novo modelo/API foram omitidos.
 }
